@@ -3,3 +3,10 @@ export interface Category {
     title: string,
     imageUrl: string
 }
+
+export interface SignUp {
+    displayName: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+}

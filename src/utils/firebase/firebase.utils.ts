@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
+import {getAuth, GoogleAuthProvider, signInWithPopup, User, createUserWithEmailAndPassword} from 'firebase/auth'
 import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -25,8 +25,9 @@ export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
+export const createUserDocumentFromAuth = async (userAuth: User, additionalInformation = {}) => {
+    if (!userAuth) return;
 
-export const createUserDocumentFromAuth = async (userAuth) => {
     const userDocRef = doc(db, 'users', userAuth.uid);
 
     const userSnapshot = await getDoc(userDocRef);
@@ -39,14 +40,27 @@ export const createUserDocumentFromAuth = async (userAuth) => {
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                ...additionalInformation
             });
-
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            if (typeof error === "object" && error !== null && 'code' in error) {
+                const errorCode = (error as { code: string }).code;
+                if (errorCode === 'auth/email-already-in-use') {
+                    alert("Email is already in use");
+                } else {
+                    console.log(error);
+                }
+            } else {
+                console.log("An unexpected error occurred", error);
+            }
         }
     }
 
     return userDocRef;
-
 }
+
+ export const createAuthUserWithEmailAndPassword = async (email: string, password: string) => {
+    if (!email || !password) throw new Error("Email and password must be provided");
+    return await createUserWithEmailAndPassword(auth, email, password)
+ }
