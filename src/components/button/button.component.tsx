@@ -2,9 +2,10 @@ import React, {ReactNode} from "react";
 import "./button.styles.scss"
 
 interface ButtonProps {
-    children: ReactNode,
-    buttonType?: keyof typeof BUTTON_TYPE_CLASSES,
-    type?: "submit" | "reset" | "button"
+    children: ReactNode;
+    type: "submit" | "reset" | "button";
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    buttonType?: keyof typeof BUTTON_TYPE_CLASSES;
 }
 
 const BUTTON_TYPE_CLASSES = {

@@ -10,3 +10,8 @@ export interface SignUp {
     password: string,
     confirmPassword: string
 }
+
+export interface SignIn {
+    email: string,
+    password: string,
+}
