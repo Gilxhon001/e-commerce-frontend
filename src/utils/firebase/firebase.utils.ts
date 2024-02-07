@@ -3,11 +3,14 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     GoogleAuthProvider,
+    onAuthStateChanged,
     signInWithEmailAndPassword,
     signInWithPopup,
+    signOut,
     User
 } from 'firebase/auth'
 import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore'
+import {NextOrObserver} from "@firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBCUjPa4ABJ7e9Il_b54rs9wYW-pC9brC0",
@@ -76,3 +79,8 @@ export const signInAuthUserWithEmailAndPassword = async (email: string, password
     if (!email || !password) throw new Error("Email and password must be provided");
     return await signInWithEmailAndPassword(auth, email, password)
 }
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
+    onAuthStateChanged(auth, callback);

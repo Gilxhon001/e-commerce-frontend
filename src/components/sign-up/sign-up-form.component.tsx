@@ -1,10 +1,11 @@
 import {SignUp} from "../../types/interfaces.ts";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {createAuthUserWithEmailAndPassword, createUserDocumentFromAuth} from "../../utils/firebase/firebase.utils.ts";
 import FormInput from "../form-input/form-input.component.tsx";
 
 import "./sign-up-form.styles.scss"
 import Button from "../button/button.component.tsx";
+import {UserContext} from "../../context/user.context.tsx";
 
 const defaultFormFields: SignUp = {
     displayName: '',
@@ -16,8 +17,10 @@ const defaultFormFields: SignUp = {
 const SignUpForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
 
-    const {displayName, email, password, confirmPassword} = formFields
+    const {displayName, email, password, confirmPassword} = formFields;
 
+    const {setCurrentUser} = useContext(UserContext);
+    
     const resetFormFields = () => {
         setFormFields(defaultFormFields)
     }
@@ -39,6 +42,7 @@ const SignUpForm = () => {
             const {user} = result;
             await createUserDocumentFromAuth(user, {displayName});
             resetFormFields();
+            setCurrentUser(user);
         } catch (error: unknown) {
             if (typeof error === "object" && error !== null && "code" in error) {
                 const typedError = error as { code: string };
