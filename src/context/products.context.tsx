@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useState } from "react";
 import PRODUCTS from "../shop-data.json";
 import { Product } from "../types/interfaces.ts";
 
-interface UserProviderProps {
+interface ProductsProviderProps {
   children: ReactNode;
 }
 
@@ -14,7 +14,9 @@ export const ProductsContext = createContext<ProductsContextType>({
   products: [],
 });
 
-export const ProductsProvider: React.FC<UserProviderProps> = ({ children }) => {
+export const ProductsProvider: React.FC<ProductsProviderProps> = ({
+  children,
+}) => {
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const value = { products, setProducts };
 
