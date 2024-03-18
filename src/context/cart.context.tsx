@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useState } from "react";
-import { CartProduct } from "../types/interfaces.ts";
+import { CartProduct, Product } from "../types/interfaces.ts";
 
 interface CartProviderProps {
   children: ReactNode;
@@ -9,10 +9,10 @@ interface CartContextType {
   isCartOpen: boolean;
   setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: CartProduct[];
-  addItemToCart: (productToAdd: CartProduct) => void;
+  addItemToCart: (productToAdd: Product) => void;
 }
 
-const addCartItem = (cartItems: CartProduct[], productToAdd: CartProduct) => {
+const addCartItem = (cartItems: CartProduct[], productToAdd: Product) => {
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToAdd.id,
   );
@@ -38,7 +38,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartProduct[]>([]);
 
-  const addItemToCart = (productToAdd: CartProduct) => {
+  const addItemToCart = (productToAdd: Product) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   };
 
