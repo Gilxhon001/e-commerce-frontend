@@ -8,11 +8,18 @@ const CartDropdown = () => {
   const { cartItems } = useContext(CartContext);
   return (
     <div className="cart-dropdown-container">
-      <div className="cart-items">
-        {cartItems.map((item) => (
-          <CartItem key={item.id} cartItem={item} />
-        ))}
-      </div>
+      {cartItems.length ? (
+        <div className="cart-items">
+          {cartItems.map((item) => (
+            <CartItem key={item.id} cartItem={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-message">
+          <p>Cart Is Empty</p>
+        </div>
+      )}
+
       <Button type="button">GO TO CHECKOUT</Button>
     </div>
   );
