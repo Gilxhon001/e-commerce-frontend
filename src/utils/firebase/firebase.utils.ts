@@ -9,8 +9,18 @@ import {
   signOut,
   User,
 } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  setDoc,
+  writeBatch,
+} from "firebase/firestore";
 import { NextOrObserver } from "@firebase/auth";
+import { Category, Product } from "../../types/interfaces.ts";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBCUjPa4ABJ7e9Il_b54rs9wYW-pC9brC0",
@@ -36,6 +46,39 @@ export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
+
+export const addCollectionAndDocuments = async (
+  collectionKey: string,
+  objectsToAdd: Category[],
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+};
+
+interface CategoriesMap {
+  [key: string]: Product[];
+}
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot.docs.reduce<CategoriesMap>((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+};
+
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation = {},

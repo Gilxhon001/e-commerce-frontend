@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Button from "../button/button.component.tsx";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component.tsx";
 import { Product } from "../../types/interfaces.ts";
 
 import "./product-card.styles.scss";
@@ -22,7 +22,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <span className="name">{name}</span>
         <span className="price">{price}</span>
       </div>
-      <Button type="button" buttonType="inverted" onClick={addProductToCart}>
+      <Button
+        type="button"
+        buttonType={BUTTON_TYPE_CLASSES.inverted}
+        onClick={addProductToCart}
+      >
         Add to card
       </Button>
     </div>

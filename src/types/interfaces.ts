@@ -2,6 +2,16 @@ export interface Category {
   id: number;
   title: string;
   imageUrl: string;
+  items: Product[];
+}
+
+export interface HomeCategory extends Category {
+  route: string;
+}
+
+export interface CategoryDocument {
+  title: string;
+  items: Product[];
 }
 
 export interface SignUp {

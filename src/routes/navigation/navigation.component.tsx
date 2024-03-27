@@ -1,14 +1,21 @@
 /// <reference types="vite-plugin-svgr/client" />
 import CrwnLogo from "../../assets/crown.svg?react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-import "./navigation.styles.scss";
+import "./navigation.styles.tsx";
 import { UserContext } from "../../context/user.context.tsx";
 import { useContext } from "react";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 import CartIcon from "../../components/cart-icon/cart-icon.component.tsx";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component.tsx";
 import { CartContext } from "../../context/cart.context.tsx";
+import {
+  LogoContainer,
+  NavigationContainer,
+  NavLink,
+  NavLinks,
+  NavLinkSpan,
+} from "./navigation.styles.tsx";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
@@ -16,29 +23,25 @@ const Navigation = () => {
 
   return (
     <>
-      <div className="navigation">
-        <Link className="logo-container" to="/">
+      <NavigationContainer>
+        <LogoContainer to="/">
           <CrwnLogo />
-        </Link>
-        <div className="nav-links-container">
-          <Link className="nav-link" to="/shop">
-            SHOP
-          </Link>
+        </LogoContainer>
+        <NavLinks>
+          <NavLink to="/shop">SHOP</NavLink>
 
           {currentUser ? (
-            <span className="nav-link" onClick={signOutUser}>
+            <NavLinkSpan as="span" onClick={signOutUser}>
               SIGN OUT
-            </span>
+            </NavLinkSpan>
           ) : (
-            <Link className="nav-link" to="/auth">
-              SIGN IN
-            </Link>
+            <NavLink to="/auth">SIGN IN</NavLink>
           )}
 
           <CartIcon />
-        </div>
+        </NavLinks>
         {isCartOpen && <CartDropdown />}
-      </div>
+      </NavigationContainer>
       <Outlet />
     </>
   );
